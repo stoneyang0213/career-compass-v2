@@ -1,0 +1,71 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="AI 正在生成报告 · 天职探索">
+  <main class="min-h-screen flex items-center justify-center px-6">
+    <section class="max-w-md text-center space-y-8">
+      <div class="w-12 h-12 mx-auto border-2 border-gray-200 border-t-gray-900 rounded-full animate-spin"></div>
+      <div>
+        <h1 class="text-2xl font-semibold text-gray-900 mb-3">AI 正在生成你的报告</h1>
+        <p id="progress-msg" class="text-sm text-gray-500">综合分析 165 道题 + 4 个维度 + 行业趋势数据库…</p>
+      </div>
+      <p class="text-xs text-gray-400">通常需要 2-5 分钟。请保持页面打开，不要关闭浏览器。</p>
+      <p id="elapsed" class="text-xs text-gray-300"></p>
+    </section>
+  </main>
+</BaseLayout>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const reportId = params.get("id");
+  if (!reportId) {
+    alert("缺少 reportId 参数");
+    window.location.replace("/");
+  }
+
+  const msgEl = document.getElementById("progress-msg")!;
+  const elapsedEl = document.getElementById("elapsed")!;
+  const startTime = Date.now();
+  const messages = [
+    "综合分析 165 道题 + 4 个维度 + 行业趋势数据库…",
+    "正在比对你与 30+ 行业的匹配度…",
+    "为你绘制四维框架贴合度图谱…",
+    "调用大模型推理你的最佳职业路径…",
+    "整理推荐职业的能力门槛与行动计划…",
+    "细化短期 / 中期 / 长期的可执行步骤…"
+  ];
+  let msgIdx = 0;
+  const msgTimer = setInterval(() => {
+    msgIdx = (msgIdx + 1) % messages.length;
+    msgEl.textContent = messages[msgIdx];
+  }, 12000);
+  const elapsedTimer = setInterval(() => {
+    const sec = Math.floor((Date.now() - startTime) / 1000);
+    elapsedEl.textContent = `已等待 ${sec} 秒`;
+  }, 1000);
+
+  async function poll(): Promise<void> {
+    try {
+      const resp = await fetch(`/api/status?reportId=${reportId}`);
+      const data = await resp.json();
+      if (data.status === "done") {
+        clearInterval(msgTimer);
+        clearInterval(elapsedTimer);
+        window.location.replace(`/report/${reportId}`);
+        return;
+      }
+      if (data.status === "error") {
+        clearInterval(msgTimer);
+        clearInterval(elapsedTimer);
+        msgEl.textContent = `生成失败：${data.errorMsg ?? "未知错误"}`;
+        msgEl.className = "text-sm text-red-600";
+        return;
+      }
+    } catch (e) {
+      console.warn("polling error:", e);
+    }
+    setTimeout(poll, 5000);
+  }
+  poll();
+</script>

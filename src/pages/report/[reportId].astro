@@ -1,0 +1,56 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ReportView from "../../components/ReportView.tsx";
+
+const { reportId } = Astro.params;
+const env = Astro.locals.runtime.env;
+const db = env.DB;
+
+let report: any = null;
+let model: string | null = null;
+let createdAt: number | null = null;
+let errorMsg: string | null = null;
+
+if (reportId) {
+  const row = await db
+    .prepare(`SELECT id, status, model, created_at, parsed_report, error_msg FROM reports WHERE id = ?`)
+    .bind(reportId)
+    .first<{ id: string; status: string; model: string; created_at: number; parsed_report: string | null; error_msg: string | null }>();
+  if (!row) {
+    errorMsg = "报告不存在";
+  } else if (row.status !== "done") {
+    errorMsg = row.status === "error" ? `生成失败：${row.error_msg}` : "报告还在生成中，请稍后";
+  } else {
+    report = row.parsed_report ? JSON.parse(row.parsed_report) : null;
+    model = row.model;
+    createdAt = row.created_at;
+  }
+}
+---
+
+<BaseLayout title="职业规划报告 · 天职探索">
+  <header class="fixed top-0 inset-x-0 bg-white/80 backdrop-blur-xl border-b border-gray-100 z-50">
+    <div class="max-w-3xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="/" class="text-sm text-gray-600 hover:text-gray-900">← 返回首页</a>
+      <span class="text-xs text-gray-400">
+        {createdAt ? new Date(createdAt).toLocaleDateString("zh-CN") : ""}
+        {model && ` · ${model.split("/").at(-1)}`}
+      </span>
+    </div>
+  </header>
+
+  <main class="pt-24 pb-20 px-6 min-h-screen">
+    <div class="max-w-3xl mx-auto">
+      {errorMsg ? (
+        <div class="text-center py-20 space-y-4">
+          <p class="text-lg text-gray-900">{errorMsg}</p>
+          <a href="/" class="inline-block text-sm text-blue-600 hover:underline">回首页</a>
+        </div>
+      ) : report ? (
+        <ReportView report={report} reportId={reportId!} client:load />
+      ) : (
+        <p class="text-center text-gray-500 py-20">加载中…</p>
+      )}
+    </div>
+  </main>
+</BaseLayout>

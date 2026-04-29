@@ -1,0 +1,14 @@
+# 本地开发用 secrets — 复制为 .dev.vars 后填上真实值（.dev.vars 在 .gitignore 内）
+# 生产环境用 `npx wrangler pages secret put NAME` 上传到 CF
+
+# 硅基流动 LLM
+SILICONFLOW_API_KEY=
+SILICONFLOW_BASE_URL=https://api.siliconflow.cn/v1
+SILICONFLOW_MODEL=Pro/deepseek-ai/DeepSeek-V3.2
+
+# Resend 邮件
+RESEND_API_KEY=
+RESEND_FROM=noreply@stoneyang.top
+
+# Admin 后台口令（任意字符串，建议 32+ 随机字符）
+ADMIN_TOKEN=

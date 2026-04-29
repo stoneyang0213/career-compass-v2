@@ -37,17 +37,35 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 </BaseLayout>
 
 <script>
-  // 生成报告功能在 Step 4 接通后端 API 后实现
-  // v1 占位：弹个提示告知 + 把 profile 打到 console 方便 debug
   import { store } from "../lib/store";
 
-  document.getElementById("generate-btn")?.addEventListener("click", () => {
+  const btn = document.getElementById("generate-btn") as HTMLButtonElement | null;
+  btn?.addEventListener("click", async () => {
     const profile = store.load();
-    console.log("[debug] 当前 profile:", profile);
-    alert(
-      "v1 生成功能尚未接通后端（Step 4 实现）。\n" +
-      "你的所有答案已保存在 localStorage（key: career-compass-v2-progress）。\n" +
-      "F12 控制台已打印完整 profile 供 debug。"
-    );
+    if (!profile) {
+      alert("找不到本地测评数据，请重新开始");
+      return;
+    }
+    btn.disabled = true;
+    btn.textContent = "提交中…";
+    try {
+      const resp = await fetch("/api/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(profile)
+      });
+      const data = await resp.json();
+      if (!resp.ok) {
+        alert(`生成失败: ${data.error ?? resp.status}\n${JSON.stringify(data, null, 2)}`);
+        btn.disabled = false;
+        btn.textContent = "生成我的职业规划报告";
+        return;
+      }
+      window.location.assign(`/generating?id=${data.reportId}`);
+    } catch (e) {
+      alert(`网络错误: ${e instanceof Error ? e.message : String(e)}`);
+      btn.disabled = false;
+      btn.textContent = "生成我的职业规划报告";
+    }
   });
 </script>
