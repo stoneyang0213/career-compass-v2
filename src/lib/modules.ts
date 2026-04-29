@@ -6,7 +6,7 @@ export const MODULES: ModuleMeta[] = [
   { id: "mbti", title: "性格类型测评", subtitle: "60 题 · 基于经典理论改编", questionsCount: 60, estimatedMinutes: 12, route: "/assess/mbti", order: 3 },
   { id: "holland", title: "职业兴趣测评", subtitle: "60 题 · 基于经典理论改编", questionsCount: 60, estimatedMinutes: 12, route: "/assess/holland", order: 4 },
   { id: "values", title: "职业价值观测评", subtitle: "45 题 · 基于经典理论改编", questionsCount: 45, estimatedMinutes: 9, route: "/assess/values", order: 5 },
-  { id: "dimensions", title: "四维深度自述", subtitle: "爱 / 长 / 需 / 利 · 每段 ≥150 字", questionsCount: 4, estimatedMinutes: 8, route: "/assess/dimensions", order: 6 }
+  { id: "dimensions", title: "深度自述", subtitle: "爱 / 长 / 利 · 每段 ≥50 字（需由系统判读）", questionsCount: 3, estimatedMinutes: 3, route: "/assess/dimensions", order: 6 }
 ];
 
 export function nextModule(current: ModuleId): ModuleMeta | null {

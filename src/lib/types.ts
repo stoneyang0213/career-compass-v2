@@ -43,10 +43,14 @@ export interface Context {
 // 量表答题：questionId -> 1..5（李克特）或 0/1（二选一）
 export type QuizAnswers = Record<string, number>;
 
+/**
+ * 用户自述（3 段）
+ * 注意：原"择世所需 (demand)"已移除，由 AI 基于 industry_trends.json 趋势库自行判读
+ * + 用户的 mbti/holland/values/context 维度交叉推理
+ */
 export interface Dimensions {
   passion: string;
   strength: string;
-  demand: string;
   value: string;
 }
 

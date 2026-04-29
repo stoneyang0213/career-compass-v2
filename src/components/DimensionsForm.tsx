@@ -2,26 +2,20 @@ import { useEffect, useState } from "react";
 import { store } from "../lib/store";
 import type { Dimensions } from "../lib/types";
 
-const MIN_CHARS = 150;
+const MIN_CHARS = 50;
 
 const FIELDS: { key: keyof Dimensions; icon: string; label: string; placeholder: string }[] = [
   {
     key: "passion",
     icon: "💖",
     label: "择己所爱（兴趣与热情）",
-    placeholder: "什么活动 / 主题让你感到有内驱力、能进入心流？详细说说你最想做、做了不嫌累的事..."
+    placeholder: "什么活动 / 主题让你感到有内驱力、能进入心流？说说你最想做、做了不嫌累的事..."
   },
   {
     key: "strength",
     icon: "💪",
     label: "择己所长（技能与优势）",
-    placeholder: "你最强的硬技能与软技能是什么？举一两个具体成就案例（项目/作品/事件），不要泛泛而谈..."
-  },
-  {
-    key: "demand",
-    icon: "🌍",
-    label: "择世所需（社会需求与趋势）",
-    placeholder: "你观察到社会 / 产业有哪些重要趋势或问题想解决？哪些领域你觉得未来 5-10 年值得投入..."
+    placeholder: "你最强的硬技能与软技能是什么？举一个具体成就案例（项目/作品/事件）..."
   },
   {
     key: "value",
@@ -53,14 +47,13 @@ export default function DimensionsForm() {
     setError(null);
     if (!allOk) {
       const remaining = counts.filter((c) => !c.ok).map((c) => FIELDS.find((f) => f.key === c.key)?.label).join(" / ");
-      setError(`还有 ${4 - passedCount} 段未达 ${MIN_CHARS} 字：${remaining}`);
+      setError(`还有 ${FIELDS.length - passedCount} 段未达 ${MIN_CHARS} 字：${remaining}`);
       return;
     }
 
     store.completeModule("dimensions", "dimensions", {
       passion: data.passion!.trim(),
       strength: data.strength!.trim(),
-      demand: data.demand!.trim(),
       value: data.value!.trim()
     });
     window.location.assign("/finish");
@@ -69,18 +62,20 @@ export default function DimensionsForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-10">
       <p className="text-sm text-gray-600 -mt-6 leading-relaxed">
-        这 4 段是 AI 写出深度报告的关键 — 比所有量表加起来都重要。
+        这 3 段是 AI 写出深度报告的关键 — 比所有量表加起来都重要。
         每段 <span className="font-semibold">≥ {MIN_CHARS} 字</span>，无上限。可随时切换补充。
+        <br />
+        <span className="text-xs text-gray-400">「择世所需」由系统基于行业趋势数据库自动判读，无需你填写。</span>
       </p>
 
       <div className="flex items-center gap-3 text-xs text-gray-500">
         <div className="flex-1 bg-gray-100 rounded-full h-1 overflow-hidden">
           <div
             className="bg-gray-900 h-1 transition-all duration-300"
-            style={{ width: `${(passedCount / 4) * 100}%` }}
+            style={{ width: `${(passedCount / FIELDS.length) * 100}%` }}
           />
         </div>
-        <span>{passedCount} / 4 段达标</span>
+        <span>{passedCount} / {FIELDS.length} 段达标</span>
       </div>
 
       {FIELDS.map((f) => {
