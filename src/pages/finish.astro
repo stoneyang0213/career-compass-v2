@@ -1,0 +1,53 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="测评完成 · 天职探索">
+  <main class="min-h-screen flex items-center justify-center px-6">
+    <section class="max-w-2xl text-center space-y-8">
+      <div class="w-20 h-20 mx-auto rounded-full bg-gray-900 flex items-center justify-center text-white text-3xl">
+        ✓
+      </div>
+      <div>
+        <p class="text-sm tracking-widest text-gray-500 uppercase mb-2">All Done</p>
+        <h1 class="text-4xl font-semibold text-gray-900 tracking-tight">所有测评已完成</h1>
+        <p class="text-base text-gray-600 mt-4 leading-relaxed">
+          基本信息 · 当前情境 · MBTI · 霍兰德 · 舒伯 · 四维自述<br />
+          全部到位，可以让 AI 开始为你生成深度职业规划报告
+        </p>
+      </div>
+
+      <div class="pt-4">
+        <button
+          id="generate-btn"
+          type="button"
+          class="px-10 py-4 bg-gray-900 text-white text-base font-medium rounded-full hover:bg-gray-800 transition"
+        >
+          生成我的职业规划报告
+        </button>
+        <p class="text-xs text-gray-400 mt-4">生成约需 2-5 分钟（AI 模型推理时间）</p>
+      </div>
+
+      <p class="text-xs text-gray-400 pt-8">
+        想检查或修改某一节？
+        <a href="/start" class="underline hover:text-gray-900">返回任意模块</a>
+      </p>
+    </section>
+  </main>
+</BaseLayout>
+
+<script>
+  // 生成报告功能在 Step 4 接通后端 API 后实现
+  // v1 占位：弹个提示告知 + 把 profile 打到 console 方便 debug
+  import { store } from "../lib/store";
+
+  document.getElementById("generate-btn")?.addEventListener("click", () => {
+    const profile = store.load();
+    console.log("[debug] 当前 profile:", profile);
+    alert(
+      "v1 生成功能尚未接通后端（Step 4 实现）。\n" +
+      "你的所有答案已保存在 localStorage（key: career-compass-v2-progress）。\n" +
+      "F12 控制台已打印完整 profile 供 debug。"
+    );
+  });
+</script>
