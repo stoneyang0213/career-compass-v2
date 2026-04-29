@@ -1,0 +1,14 @@
+[
+  { "id": "m1", "text": "在大型聚会中，我会感到精力充沛、被激发", "meta": { "dim": "EI", "side": "E" } },
+  { "id": "m2", "text": "独自工作时，我的效率比群体环境更高", "meta": { "dim": "EI", "side": "I" } },
+  { "id": "m3", "text": "我倾向于先想清楚再发言", "meta": { "dim": "EI", "side": "I" } },
+  { "id": "m4", "text": "我注重事实、数据和具体细节", "meta": { "dim": "SN", "side": "S" } },
+  { "id": "m5", "text": "我善于看到事物的可能性和未来走向", "meta": { "dim": "SN", "side": "N" } },
+  { "id": "m6", "text": "我喜欢用类比和象征来理解世界", "meta": { "dim": "SN", "side": "N" } },
+  { "id": "m7", "text": "做决定时，我会先考虑逻辑再考虑情感", "meta": { "dim": "TF", "side": "T" } },
+  { "id": "m8", "text": "我会优先考虑他人的感受", "meta": { "dim": "TF", "side": "F" } },
+  { "id": "m9", "text": "我会因为公平和原则而坚持立场", "meta": { "dim": "TF", "side": "T" } },
+  { "id": "m10", "text": "我喜欢提前规划好一切", "meta": { "dim": "JP", "side": "J" } },
+  { "id": "m11", "text": "我享受随性、灵活的安排", "meta": { "dim": "JP", "side": "P" } },
+  { "id": "m12", "text": "我倾向于把任务提前完成", "meta": { "dim": "JP", "side": "J" } }
+]
