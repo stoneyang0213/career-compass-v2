@@ -1,0 +1,38 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import ProgressTrack from "../components/ProgressTrack.astro";
+import { moduleById } from "../lib/modules";
+import type { ModuleId } from "../lib/types";
+
+interface Props {
+  moduleId: ModuleId;
+  /** 已完成模块列表，由前端 island 注水，SSR 阶段先传空数组 */
+  completed?: ModuleId[];
+  title?: string;
+}
+
+const { moduleId, completed = [], title } = Astro.props;
+const meta = moduleById(moduleId);
+const pageTitle = title ?? `${meta?.title ?? "测评"} · 天职探索`;
+---
+
+<BaseLayout title={pageTitle}>
+  <header class="fixed top-0 inset-x-0 bg-white/80 backdrop-blur-xl border-b border-gray-100 z-50">
+    <div class="max-w-3xl mx-auto px-6 py-4 flex items-center gap-4">
+      <a href="/" class="text-sm text-gray-600 hover:text-gray-900 shrink-0">← 返回首页</a>
+      <div class="flex-1">
+        <ProgressTrack current={moduleId} completed={completed} />
+      </div>
+    </div>
+  </header>
+
+  <main class="pt-32 pb-16 px-6 min-h-screen">
+    <div class="max-w-2xl mx-auto">
+      <div class="mb-10">
+        <p class="text-xs tracking-widest text-gray-500 uppercase mb-2">{meta?.subtitle}</p>
+        <h1 class="text-3xl font-semibold text-gray-900 tracking-tight">{meta?.title}</h1>
+      </div>
+      <slot />
+    </div>
+  </main>
+</BaseLayout>

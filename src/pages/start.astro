@@ -1,0 +1,22 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="启动中 · 天职探索">
+  <main class="min-h-screen flex items-center justify-center px-6">
+    <div class="text-center space-y-4">
+      <div class="w-10 h-10 mx-auto border-2 border-gray-200 border-t-gray-900 rounded-full animate-spin"></div>
+      <p class="text-sm text-gray-500">启动中…</p>
+    </div>
+  </main>
+</BaseLayout>
+
+<script>
+  import { store } from "../lib/store";
+  import { MODULES } from "../lib/modules";
+
+  // 客户端：取或创建 profile，跳转到第一个未完成模块
+  const profile = store.getOrCreate();
+  const next = MODULES.find((m) => !profile.completed.includes(m.id)) ?? MODULES[0];
+  window.location.replace(next.route);
+</script>
